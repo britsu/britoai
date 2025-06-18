@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brito.ai | Consultoria Estratégica & IA</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Custom Styles -->
+    <style>
+        /* Applying the Inter font family as the default */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #030712; /* equivalent to bg-gray-950 for consistency */
+        }
+        
+        /* Neon Glow Effect for buttons on hover */
+        .neon-glow:hover {
+            box-shadow: 0 0 10px #34d399, 0 0 20px #34d399, 0 0 30px #34d399;
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* === CTA Laser Button Effect (Upgraded) === */
+        .cta-laser-effect {
+            position: relative;
+            overflow: hidden;
+            -webkit-transform: translate3d(0,0,0);
+            transform: translate3d(0,0,0);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .cta-laser-effect span {
+            position: absolute;
+            display: block;
+            box-shadow: 0 0 10px rgba(52, 211, 153, 0.8), 
+                        0 0 20px rgba(52, 211, 153, 0.6);
+            border-radius: 2px;
+        }
+
+        .cta-laser-effect span:nth-child(1) {
+            top: 0; left: -100%; width: 100%; height: 3px;
+            background: linear-gradient(90deg, transparent, #34d399);
+            animation: laser-h 2.5s linear infinite;
+        }
+        @keyframes laser-h { 0% { left: -100%; } 100% { left: 100%; } }
+
+        .cta-laser-effect span:nth-child(2) {
+            top: -100%; right: 0; width: 3px; height: 100%;
+            background: linear-gradient(180deg, transparent, #34d399);
+            animation: laser-v 2.5s linear infinite; animation-delay: 0.625s;
+        }
+        @keyframes laser-v { 0% { top: -100%; } 100% { top: 100%; } }
+
+        .cta-laser-effect span:nth-child(3) {
+            bottom: 0; right: -100%; width: 100%; height: 3px;
+            background: linear-gradient(270deg, transparent, #34d399);
+            animation: laser-h-rev 2.5s linear infinite; animation-delay: 1.25s;
+        }
+        @keyframes laser-h-rev { 0% { right: -100%; } 100% { right: 100%; } }
+
+        .cta-laser-effect span:nth-child(4) {
+            bottom: -100%; left: 0; width: 3px; height: 100%;
+            background: linear-gradient(360deg, transparent, #34d399);
+            animation: laser-v-rev 2.5s linear infinite; animation-delay: 1.875s;
+        }
+        @keyframes laser-v-rev { 0% { bottom: -100%; } 100% { bottom: 100%; } }
+        
+        /* === Sparks Effect === */
+        .cta-laser-effect::before {
+            content: ''; position: absolute; inset: -20px;
+            pointer-events: none;
+            background-image:
+                radial-gradient(circle at 30% 40%, #fff 1px, transparent 2px),
+                radial-gradient(circle at 75% 20%, #fff 2px, transparent 3px),
+                radial-gradient(circle at 60% 85%, #a7f3d0 2px, transparent 3px),
+                radial-gradient(circle at 20% 70%, #fff 1px, transparent 2px),
+                radial-gradient(circle at 80% 90%, #fff 1.5px, transparent 2.5px);
+            background-repeat: no-repeat;
+            opacity: 0;
+            animation: sparks-fly 2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+            z-index: 10;
+        }
+        @keyframes sparks-fly {
+            0% { opacity: 0; transform: scale(0.3); background-position: 50% 50%; }
+            50% { opacity: 1; }
+            100% { opacity: 0; transform: scale(1.5); background-position: 0% 0%, 100% 0%, 100% 100%, 0% 100%; }
+        }
+
+        /* Form Input Styling */
+        .form-input {
+            background-color: #1f2937; /* bg-gray-800 */
+            border: 1px solid #374151; /* border-gray-700 */
+            color: #d1d5db; /* text-gray-300 */
+            border-radius: 0.5rem; /* rounded-lg */
+            padding: 0.75rem 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #34d399; /* emerald-400 */
+            box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.5);
+        }
+        .form-input::placeholder {
+            color: #6b7280; /* text-gray-500 */
+        }
+        
+        /* === Portfolio Scrolling Image Effect === */
+        .portfolio-image-container {
+            position: relative;
+            height: 400px; /* Controls the 'window' size */
+            width: 100%;
+            overflow: hidden;
+            border-radius: 0.5rem; /* rounded-lg */
+            -webkit-mask-image: -webkit-radial-gradient(white, black); /* Improves animation performance */
+            background-color: #111827; /* Fallback color */
+        }
+        .scrolling-image {
+            position: absolute;
+            width: 100%;
+            height: auto;
+            top: 0;
+            left: 0;
+            /* Will be animated with JS */
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 antialiased">
+
+    <!-- === HEADER & NAVIGATION === -->
+    <header id="main-header" class="bg-gray-900/80 backdrop-blur-sm fixed top-0 left-0 right-0 z-50 opacity-0 -translate-y-full transition-all duration-500 ease-in-out">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-white tracking-wider">Brito<span class="text-emerald-400">.ai</span></a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#about" class="hover:text-emerald-400 transition-colors">Sobre Mim</a>
+                <a href="#services" class="hover:text-emerald-400 transition-colors">Serviços</a>
+                <a href="#portfolio" class="hover:text-emerald-400 transition-colors">Resultados</a>
+                <a href="#cta" class="hover:text-emerald-400 transition-colors">Contato</a>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden p-2 rounded-md hover:bg-gray-800 focus:outline-none">
+                <i data-lucide="menu" class="h-6 w-6 text-white"></i>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden">
+            <nav class="flex flex-col items-center space-y-4 px-6 pb-4">
+                <a href="#about" class="block w-full text-center py-2 hover:text-emerald-400 transition-colors">Sobre Mim</a>
+                <a href="#services" class="block w-full text-center py-2 hover:text-emerald-400 transition-colors">Serviços</a>
+                <a href="#portfolio" class="block w-full text-center py-2 hover:text-emerald-400 transition-colors">Resultados</a>
+                <a href="#cta" class="block w-full text-center py-2 hover:text-emerald-400 transition-colors">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- === HERO SECTION === -->
+        <section id="hero" class="min-h-screen flex items-center bg-gray-900 pt-24 md:pt-0">
+            <div class="container mx-auto px-6 text-center">
+                <div class="max-w-4xl mx-auto">
+                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight mb-4">
+                        Transformo Negócios em <span class="text-emerald-400">Máquinas de Crescimento</span> 🚀
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-300 mb-8">
+                        Marketing, Tráfego, Automação e Micro SaaS com Inteligência Artificial.
+                    </p>
+                    <a href="#cta" class="cta-laser-effect inline-block bg-emerald-500 text-gray-900 font-bold py-4 px-8 rounded-lg text-lg transform hover:scale-105 transition-transform neon-glow">
+                        <span></span><span></span><span></span><span></span>
+                        📲 Solicitar uma Análise Gratuita
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- === ABOUT ME SECTION === -->
+        <section id="about" class="py-20 bg-gray-950">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">Quem Está Por Trás do <span class="text-emerald-400">Brito.ai</span>?</h2>
+                </div>
+                <div class="flex justify-center mb-10">
+                     <img src="assets/perfil.jpg" 
+                          alt="Foto de Luis Henrick (Brito)" 
+                          class="w-40 h-40 rounded-full border-4 border-emerald-400 object-cover shadow-2xl shadow-emerald-500/20">
+                </div>
+                <div class="max-w-3xl mx-auto text-center text-lg text-gray-300 leading-relaxed space-y-4">
+                    <p>
+                        Sou <strong>Luis Henrick (Brito)</strong>, Consultor Estratégico. Minha missão é ajudar empresas a <strong>vender mais, gastar menos e operar de forma inteligente</strong>.
+                    </p>
+                    <p>
+                        Uso a combinação perfeita entre Marketing, Processos, Tráfego Pago, Automação e Micro SaaS impulsionado por IA.
+                    </p>
+                    <p class="font-semibold text-white">
+                        Transformo empresas comuns em negócios escaláveis, organizados e lucrativos.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- === SERVICES SECTION === -->
+        <section id="services" class="py-20 bg-gray-900">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">Como Posso Ajudar Seu Negócio a <span class="text-emerald-400">Crescer</span>?</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-gray-800 p-8 rounded-xl border border-gray-700 hover:border-emerald-500 transition-colors transform hover:-translate-y-2">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-full bg-emerald-500/20 mb-6"><i data-lucide="bar-chart-3" class="h-6 w-6 text-emerald-400"></i></div>
+                        <h3 class="text-xl font-bold text-white mb-3">Gestão Estratégica de Mídias Sociais</h3>
+                        <p class="text-gray-400">🚀 Posicionamento, conteúdo e crescimento orgânico.</p>
+                    </div>
+                    <div class="bg-gray-800 p-8 rounded-xl border border-gray-700 hover:border-emerald-500 transition-colors transform hover:-translate-y-2">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-full bg-emerald-500/20 mb-6"><i data-lucide="target" class="h-6 w-6 text-emerald-400"></i></div>
+                        <h3 class="text-xl font-bold text-white mb-3">Tráfego Pago com Foco em Vendas</h3>
+                        <p class="text-gray-400">🎯 Meta Ads, Google Ads e campanhas de alta conversão.</p>
+                    </div>
+                    <div class="bg-gray-800 p-8 rounded-xl border border-gray-700 hover:border-emerald-500 transition-colors transform hover:-translate-y-2">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-full bg-emerald-500/20 mb-6"><i data-lucide="bot" class="h-6 w-6 text-emerald-400"></i></div>
+                        <h3 class="text-xl font-bold text-white mb-3">Automatização de Processos</h3>
+                        <p class="text-gray-400">⚙️ CRM, WhatsApp, e fluxos para máxima eficiência.</p>
+                    </div>
+                    <div class="bg-gray-800 p-8 rounded-xl border border-gray-700 hover:border-emerald-500 transition-colors transform hover:-translate-y-2">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-full bg-emerald-500/20 mb-6"><i data-lucide="brain-circuit" class="h-6 w-6 text-emerald-400"></i></div>
+                        <h3 class="text-xl font-bold text-white mb-3">Análise e Otimização Empresarial</h3>
+                         <p class="text-gray-400">🧠 Diagnóstico completo para identificar oportunidades.</p>
+                    </div>
+                    <div class="bg-gray-800 p-8 rounded-xl border border-gray-700 hover:border-emerald-500 transition-colors transform hover:-translate-y-2">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-full bg-emerald-500/20 mb-6"><i data-lucide="code-2" class="h-6 w-6 text-emerald-400"></i></div>
+                        <h3 class="text-xl font-bold text-white mb-3">Criação de Micro SaaS</h3>
+                        <p class="text-gray-400">💻 Soluções sob demanda (captura, CRM, automações).</p>
+                    </div>
+                    <div class="bg-gray-800 p-8 rounded-xl border border-gray-700 hover:border-emerald-500 transition-colors transform hover:-translate-y-2">
+                         <div class="flex items-center justify-center h-12 w-12 rounded-full bg-emerald-500/20 mb-6"><i data-lucide="rocket" class="h-6 w-6 text-emerald-400"></i></div>
+                        <h3 class="text-xl font-bold text-white mb-3">Campanhas de Vendas com IA</h3>
+                        <p class="text-gray-400">🏗️ Estratégias completas para lançamentos e picos de vendas.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- === PORTFOLIO / RESULTS SECTION === -->
+        <section id="portfolio" class="py-20 bg-gray-950">
+            <div class="container mx-auto px-6">
+                 <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">Portfólio de <span class="text-emerald-400">Resultados</span></h2>
+                </div>
+                
+                <div class="bg-gray-800 rounded-xl overflow-hidden md:flex items-center gap-8 p-8 lg:p-12 mb-12 border border-gray-700">
+                    <div class="md:w-1/2">
+                        <h3 class="text-2xl font-bold text-white mb-2">Caso Real: <span class="text-emerald-400">AutoConforto</span></h3>
+                        <p class="text-gray-400 mb-4">A AutoConforto é uma loja online de acessórios automotivos premium. Toda a operação foi criada, posicionada, estruturada e escalada por mim:</p>
+                        <ul class="space-y-2 text-gray-300 mb-6">
+                            <li class="flex items-start"><i data-lucide="check-circle-2" class="h-5 w-5 text-emerald-400 mr-2 mt-1 flex-shrink-0"></i> Criação da loja Shopify</li>
+                            <li class="flex items-start"><i data-lucide="check-circle-2" class="h-5 w-5 text-emerald-400 mr-2 mt-1 flex-shrink-0"></i> Gestão de tráfego pago</li>
+                            <li class="flex items-start"><i data-lucide="check-circle-2" class="h-5 w-5 text-emerald-400 mr-2 mt-1 flex-shrink-0"></i> Criação de conteúdos e postagens</li>
+                            <li class="flex items-start"><i data-lucide="check-circle-2" class="h-5 w-5 text-emerald-400 mr-2 mt-1 flex-shrink-0"></i> Estratégias de vendas e automação</li>
+                        </ul>
+                        <div class="bg-emerald-900/50 border-l-4 border-emerald-400 p-4 rounded-r-lg mb-6">
+                           <p class="font-semibold text-emerald-300">Resultado: Operação digital enxuta, vendas escaláveis e baixo custo fixo.</p>
+                        </div>
+                        <a href="https://autoconforto.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 py-2 px-4 border border-emerald-400 text-emerald-400 rounded-lg hover:bg-emerald-400 hover:text-gray-900 transition-colors font-semibold">
+                            <i data-lucide="external-link" class="h-4 w-4"></i>
+                            Ver Projeto
+                        </a>
+                    </div>
+                     <div class="md:w-1/2 mt-8 md:mt-0">
+                        <a href="https://autoconforto.com" target="_blank" rel="noopener noreferrer">
+                            <div class="portfolio-image-container">
+                                <img src="assets/autoconforto.png" alt="Screenshot do projeto AutoConforto" class="scrolling-image">
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="text-center my-12">
+                     <p class="text-xl font-semibold text-white bg-gray-800 p-6 rounded-lg border border-emerald-500/30">🟢 Eu posso aplicar o mesmo modelo de <span class="text-emerald-400">crescimento inteligente</span> em qualquer empresa.</p>
+                 </div>
+
+                <div class="bg-gray-800 rounded-xl overflow-hidden md:flex flex-row-reverse items-center gap-8 p-8 lg:p-12 border border-gray-700">
+                    <div class="md:w-1/2">
+                        <h3 class="text-2xl font-bold text-white mb-2">Exemplo Real: <span class="text-emerald-400">Micro SaaS de Captura</span></h3>
+                        <p class="text-gray-400 mb-4">Micro SaaS de página de captura para empresas que precisam gerar leads de forma simples e eficiente. Uma amostra do tipo de tecnologia que aplico para meus clientes.</p>
+                        <a href="https://britsu.github.io/toyomix/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 py-2 px-4 border border-emerald-400 text-emerald-400 rounded-lg hover:bg-emerald-400 hover:text-gray-900 transition-colors font-semibold">
+                            <i data-lucide="external-link" class="h-4 w-4"></i>
+                            Ver Projeto Funcional
+                        </a>
+                    </div>
+                    <div class="md:w-1/2 mt-8 md:mt-0">
+                        <a href="https://britsu.github.io/toyomix/" target="_blank" rel="noopener noreferrer">
+                            <div class="portfolio-image-container">
+                                <img src="assets/toyomix.png" alt="Screenshot do projeto Toyomix" class="scrolling-image">
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- === FINAL CTA SECTION / CONTACT FORM === -->
+        <section id="cta" class="py-20 bg-gray-900">
+            <div class="container mx-auto px-6">
+                <div class="max-w-3xl mx-auto text-center">
+                    <h2 class="text-3xl md:text-5xl font-bold text-white leading-tight mb-4">
+                        Vamos iniciar seu projeto de <span class="text-emerald-400">crescimento</span>? 💡
+                    </h2>
+                    <p class="text-lg text-gray-300 mb-10">
+                        Preencha o formulário abaixo para receber uma análise gratuita.
+                    </p>
+                </div>
+                <form id="whatsapp-form" class="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-400 mb-2 text-left">Seu Nome *</label>
+                        <input type="text" id="name" name="name" class="form-input" placeholder="Ex: João Silva" required>
+                    </div>
+                    <div>
+                        <label for="company" class="block text-sm font-medium text-gray-400 mb-2 text-left">Nome da Empresa</label>
+                        <input type="text" id="company" name="company" class="form-input" placeholder="Ex: Silva & Filhos Ltda">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="interest" class="block text-sm font-medium text-gray-400 mb-2 text-left">Principal Interesse</label>
+                        <select id="interest" name="interest" class="form-input">
+                            <option>Análise e Otimização Empresarial</option>
+                            <option>Tráfego Pago (Meta/Google Ads)</option>
+                            <option>Gestão de Mídias Sociais</option>
+                            <option>Automatização de Processos</option>
+                            <option>Criação de Micro SaaS</option>
+                            <option>Outro</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-2">
+                         <label for="message" class="block text-sm font-medium text-gray-400 mb-2 text-left">Sua Mensagem</label>
+                         <textarea id="message" name="message" rows="4" class="form-input" placeholder="Conte um pouco sobre o seu desafio atual..."></textarea>
+                    </div>
+                    <div class="md:col-span-2 text-center">
+                        <button type="submit" class="cta-laser-effect w-full md:w-auto inline-block bg-emerald-500 text-gray-900 font-bold py-4 px-12 rounded-lg text-lg transform hover:scale-105 transition-transform neon-glow">
+                           <span></span><span></span><span></span><span></span>
+                           Enviar para Análise via WhatsApp
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- === FOOTER === -->
+    <footer class="bg-gray-950 border-t border-gray-800">
+        <div class="container mx-auto px-6 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <p class="text-gray-400">&copy; 2024 Brito.ai. Todos os direitos reservados.</p>
+                <div class="flex space-x-6">
+                    <a href="https://instagram.com/brito.ai" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-emerald-400 transition-colors"><i data-lucide="instagram" class="h-6 w-6"></i></a>
+                    <a href="https://www.linkedin.com/in/britoai/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-emerald-400 transition-colors"><i data-lucide="linkedin" class="h-6 w-6"></i></a>
+                    <a href="https://wa.me/5563992547254" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-emerald-400 transition-colors"><i data-lucide="message-circle" class="h-6 w-6"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // --- Mobile Menu Toggle Logic ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // --- Show/Hide Header on Scroll Logic ---
+        const header = document.getElementById('main-header');
+        const scrollThreshold = 100;
+
+        const handleScroll = () => {
+            if (window.scrollY > scrollThreshold) {
+                header.classList.remove('opacity-0', '-translate-y-full');
+            } else {
+                header.classList.add('opacity-0', '-translate-y-full');
+            }
+        };
+        window.addEventListener('scroll', handleScroll, { passive: true });
+
+        // --- WhatsApp Form Submission Logic ---
+        const form = document.getElementById('whatsapp-form');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // !! IMPORTANTE: Este é o seu número de WhatsApp com código do país.
+            const phoneNumber = '5563992547254'; 
+
+            const name = document.getElementById('name').value;
+            const company = document.getElementById('company').value || 'Não informado';
+            const interest = document.getElementById('interest').value;
+            const userMessage = document.getElementById('message').value || 'Nenhuma mensagem adicional.';
+
+            // Basic validation
+            if (name.trim() === '') {
+                alert('Por favor, preencha o campo obrigatório: Nome.');
+                return;
+            }
+
+            // Formatting the message
+            const formattedMessage = `*Olá Brito, gostaria de uma análise gratuita!*%0A%0A` +
+                                 `*Nome:* ${name}%0A` +
+                                 `*Empresa:* ${company}%0A` +
+                                 `*Interesse Principal:* ${interest}%0A%0A` +
+                                 `*Mensagem:*%0A${userMessage}`;
+
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${formattedMessage}`;
+
+            // Open WhatsApp in a new tab
+            window.open(whatsappUrl, '_blank');
+        });
+
+        // --- Portfolio Image Scroll Animation (Optimized with Intersection Observer) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null, // relative to the viewport
+                rootMargin: '0px',
+                threshold: 0.1 // Start when 10% of the element is visible
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const container = entry.target;
+                        // Delay animation start by 500ms
+                        setTimeout(() => {
+                            const image = container.querySelector('.scrolling-image');
+                            
+                            // Check if animation has not already been started
+                            if (image && !container.dataset.animated) {
+                                
+                                const startAnimation = () => {
+                                    const containerHeight = container.clientHeight;
+                                    const imageHeight = image.clientHeight;
+                                    const maxScroll = imageHeight - containerHeight;
+
+                                    if (maxScroll <= 0) return; // Do not animate if image is smaller than container
+
+                                    const keyframes = [
+                                        { transform: 'translateY(0)' },
+                                        { transform: 'translateY(0)' }, // Pause at top
+                                        { transform: `translateY(-${maxScroll}px)` },
+                                        { transform: `translateY(-${maxScroll}px)` }  // Pause at bottom
+                                    ];
+
+                                    const timing = {
+                                        duration: (maxScroll / 40) * 1000, // Speed: ~40px/s for a smoother scroll
+                                        iterations: Infinity,
+                                        direction: 'alternate',
+                                        easing: 'linear', // Use linear for constant speed
+                                        offset: [0, 0.1, 0.9, 1.0] // 0-10% top pause, 10-90% scroll, 90-100% bottom pause
+                                    };
+                                    
+                                    image.animate(keyframes, timing);
+                                    container.dataset.animated = 'true'; // Mark as animated
+                                    observer.unobserve(container); // Stop observing once animation starts
+                                };
+
+                                // Ensure image is loaded before getting its height
+                                if (image.complete && image.naturalHeight !== 0) {
+                                    startAnimation();
+                                } else {
+                                    image.addEventListener('load', startAnimation, { once: true });
+                                }
+                            }
+                        }, 500); // 500ms delay
+                    }
+                });
+            }, observerOptions);
+
+            // Observe each portfolio container
+            document.querySelectorAll('.portfolio-image-container').forEach(container => {
+                observer.observe(container);
+            });
+        });
+
+    </script>
+
+</body>
+</html>
